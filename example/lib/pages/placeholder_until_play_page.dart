@@ -6,14 +6,12 @@ import 'package:flutter/material.dart';
 
 class PlaceholderUntilPlayPage extends StatefulWidget {
   @override
-  _PlaceholderUntilPlayPageState createState() =>
-      _PlaceholderUntilPlayPageState();
+  _PlaceholderUntilPlayPageState createState() => _PlaceholderUntilPlayPageState();
 }
 
 class _PlaceholderUntilPlayPageState extends State<PlaceholderUntilPlayPage> {
   late BetterPlayerController _betterPlayerController;
-  StreamController<bool> _placeholderStreamController =
-      StreamController.broadcast();
+  StreamController<bool> _placeholderStreamController = StreamController.broadcast();
   bool _showPlaceholder = true;
 
   @override
@@ -24,8 +22,7 @@ class _PlaceholderUntilPlayPageState extends State<PlaceholderUntilPlayPage> {
 
   @override
   void initState() {
-    BetterPlayerConfiguration betterPlayerConfiguration =
-        BetterPlayerConfiguration(
+    BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
       fit: BoxFit.contain,
       placeholder: _buildVideoPlaceholder(),
       showPlaceholderUntilPlay: true,
@@ -45,8 +42,9 @@ class _PlaceholderUntilPlayPageState extends State<PlaceholderUntilPlayPage> {
   }
 
   void _setPlaceholderVisibleState(bool hidden) {
-    _placeholderStreamController.add(hidden);
     _showPlaceholder = hidden;
+    setState(() {});
+    _placeholderStreamController.add(hidden);
   }
 
   ///_placeholderStreamController is used only to refresh video placeholder
@@ -55,9 +53,7 @@ class _PlaceholderUntilPlayPageState extends State<PlaceholderUntilPlayPage> {
     return StreamBuilder<bool>(
       stream: _placeholderStreamController.stream,
       builder: (context, snapshot) {
-        return _showPlaceholder
-            ? Image.network(Constants.placeholderUrl)
-            : const SizedBox();
+        return _showPlaceholder ? Image.network(Constants.placeholderUrl) : const SizedBox();
       },
     );
   }

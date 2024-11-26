@@ -455,11 +455,15 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       return;
     }
 
-    if (value.isPlaying) {
-      await _videoPlayerPlatform.play(_textureId);
+    if (_timer?.isActive == true) {
       _timer?.cancel();
+    }
+
+    if (value.isPlaying && value.position.inMilliseconds <= 0) {
+      await _videoPlayerPlatform.play(_textureId);
+
       _timer = Timer.periodic(
-        const Duration(milliseconds: 300),
+        const Duration(milliseconds: 1),
         (Timer timer) async {
           if (_isDisposed) {
             return;
@@ -480,7 +484,6 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         },
       );
     } else {
-      _timer?.cancel();
       await _videoPlayerPlatform.pause(_textureId);
     }
   }
